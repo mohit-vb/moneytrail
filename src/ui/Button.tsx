@@ -13,12 +13,16 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 export default function Button({
   variant = "primary",
   children,
+  className,
   ...props
 }: ButtonProps) {
-  const baseStyles = `flex items-center gap-1 uppercase tracking-wider`;
+  const baseStyles = `flex items-center justify-center gap-1 uppercase tracking-wider`;
   const variantStyles = buttonVariants[variant] || buttonVariants.primary;
   return (
-    <button className={`${baseStyles} ${variantStyles}`} {...props}>
+    <button
+      className={`${baseStyles} ${variantStyles} ${className}`}
+      {...props}
+    >
       {children}
     </button>
   );
