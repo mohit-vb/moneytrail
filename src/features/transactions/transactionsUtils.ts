@@ -1,5 +1,8 @@
 import { seedAccounts, seedCategories } from "../../data/seeds";
-import type { Transaction } from "../../domain/types/transactions";
+import type {
+  Transaction,
+  TransactionDateFilterValue,
+} from "../../domain/types/transactions";
 
 const getAccountName = function (accountId: string) {
   const account = seedAccounts.find((acc) => acc.id === accountId);
@@ -40,10 +43,34 @@ const formatCurrency = function (amountMinor: number) {
   return formattedCurrency.replace("₹", "₹ ");
 };
 
+const filterTransactionsByDate = function (
+  transactions: Transaction[],
+  dateFilter: TransactionDateFilterValue,
+) {
+  if (dateFilter === "Date") return transactions;
+
+  const today = new Date();
+  const currentYear = today.getFullYear();
+  const currentMonth = today.getMonth() + 1;
+
+  if (dateFilter === "this-month") {
+    return transactions.filter((transaction) => {
+      const transactionDate = new Date(transaction.date);
+      return (
+        transactionDate.getFullYear() === currentYear &&
+        transactionDate.getMonth() + 1 === currentMonth
+      );
+    });
+  }
+
+  return transactions;
+};
+
 export {
   getAccountName,
   getCategoryName,
   getFilterTransactions,
   getSearchedTransactions,
   formatCurrency,
+  filterTransactionsByDate,
 };

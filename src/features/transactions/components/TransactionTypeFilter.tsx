@@ -1,4 +1,4 @@
-import { Plus, X } from "lucide-react";
+import { Plus } from "lucide-react";
 import type { Transaction } from "../../../domain/types/transactions";
 
 type TransactionFilterType = Transaction["type"] | "all";
@@ -23,7 +23,7 @@ export default function TransactionTypeFilter({
   onFilter,
 }: TransactionTypeFilterProps) {
   return (
-    <div className="flex items-center gap-2 mt-4">
+    <div className="flex items-center gap-2 border-r border-r-gray-800 pr-10">
       {transactionTypeOptions.map((option) => (
         <button
           key={option.value}

@@ -1,11 +1,18 @@
 import { useState } from "react";
 import type { Transaction } from "../domain/types/transactions";
+import type { TransactionDateFilterValue } from "../domain/types/transactions";
 import { goldenFixture } from "../data/seeds";
 import { Plus } from "lucide-react";
 import { Button, InputEl } from "../ui";
-import TransactionTable from "../features/transactions/components/TransactionTable";
-import TransactionTypeFilter from "../features/transactions/components/TransactionTypeFilter";
 import {
+  TransactionTable,
+  TransactionTypeFilter,
+  TransactionDateFilter,
+  ActiveFilterChips,
+} from "../features/transactions/components";
+
+import {
+  filterTransactionsByDate,
   getFilterTransactions,
   getSearchedTransactions,
 } from "../features/transactions/transactionsUtils";
@@ -15,9 +22,21 @@ export default function TransactionsPage() {
   const [transactionType, setTransactionType] = useState<
     Transaction["type"] | "all"
   >("all");
+  const [dateFilter, setDateFilter] =
+    useState<TransactionDateFilterValue>("Date");
 
   const handleFilterTransaction = function (type: Transaction["type"] | "all") {
     setTransactionType(type);
+  };
+
+  const handleRemoveFilterTransaction = function () {
+    setTransactionType("all");
+  };
+
+  const handleFilterTransactionByDate = function (
+    value: TransactionDateFilterValue,
+  ) {
+    setDateFilter(value);
   };
 
   const typeFilteredTransactions = getFilterTransactions(
@@ -28,6 +47,11 @@ export default function TransactionsPage() {
   const searchedTransactions = getSearchedTransactions(
     typeFilteredTransactions,
     search,
+  );
+
+  const dateFilteredTransactions = filterTransactionsByDate(
+    searchedTransactions,
+    dateFilter,
   );
 
   return (
@@ -45,11 +69,22 @@ export default function TransactionsPage() {
         onChange={(e) => setSearch(e.target.value)}
         value={search}
       />
-
-      <TransactionTypeFilter onFilter={handleFilterTransaction} />
+      <div className="flex items-center gap-10 mt-4">
+        <TransactionTypeFilter onFilter={handleFilterTransaction} />
+        <TransactionDateFilter
+          dateFilter={dateFilter}
+          onFilter={handleFilterTransactionByDate}
+        />
+      </div>
+      <div className="mt-4 flex items-center gap-2">
+        <ActiveFilterChips
+          transactionType={transactionType}
+          onRemove={handleRemoveFilterTransaction}
+        />
+      </div>
 
       <div className="mt-6">
-        <TransactionTable transactions={searchedTransactions} />
+        <TransactionTable transactions={dateFilteredTransactions} />
       </div>
     </div>
   );
