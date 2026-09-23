@@ -41,3 +41,9 @@ export type Transaction =
   | ExpenseTransaction
   | IncomeTransaction
   | TransferTransaction;
+
+export type TransactionDateFilterValue =
+  | "Date"
+  | "this-month"
+  | "last-month"
+  | "custom-range";
