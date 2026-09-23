@@ -46,21 +46,39 @@ const formatCurrency = function (amountMinor: number) {
 const filterTransactionsByDate = function (
   transactions: Transaction[],
   dateFilter: TransactionDateFilterValue,
+  startDate: string,
+  endDate: string,
 ) {
   if (dateFilter === "Date") return transactions;
 
   const today = new Date();
   const currentYear = today.getFullYear();
-  const currentMonth = today.getMonth() + 1;
+  const currentMonth = today.getMonth();
+  const lastMonth = new Date(currentYear, currentMonth - 1, 1);
 
   if (dateFilter === "this-month") {
     return transactions.filter((transaction) => {
       const transactionDate = new Date(transaction.date);
       return (
         transactionDate.getFullYear() === currentYear &&
-        transactionDate.getMonth() + 1 === currentMonth
+        transactionDate.getMonth() === currentMonth
       );
     });
+  }
+
+  if (dateFilter === "last-month") {
+    return transactions.filter((transaction) => {
+      const transactionDate = new Date(transaction.date);
+
+      return (
+        transactionDate.getFullYear() === lastMonth.getFullYear() &&
+        transactionDate.getMonth() === lastMonth.getMonth()
+      );
+    });
+  }
+
+  if (dateFilter === "custom-range") {
+    console.log(startDate, endDate);
   }
 
   return transactions;

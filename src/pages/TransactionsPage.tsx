@@ -25,6 +25,10 @@ export default function TransactionsPage() {
   const [dateFilter, setDateFilter] =
     useState<TransactionDateFilterValue>("Date");
 
+  const [appliedStartDate, setAppliedStartDate] = useState("");
+  const [appliedEndDate, setAppliedEndDate] = useState("");
+  const [isCustomRangeOpen, setIsCustomRangeOpen] = useState(false);
+
   const handleFilterTransaction = function (type: Transaction["type"] | "all") {
     setTransactionType(type);
   };
@@ -37,6 +41,12 @@ export default function TransactionsPage() {
     value: TransactionDateFilterValue,
   ) {
     setDateFilter(value);
+  };
+
+  const handleApplyDateRange = function (startDate: string, endDate: string) {
+    setAppliedStartDate(startDate);
+    setAppliedEndDate(endDate);
+    setIsCustomRangeOpen(false);
   };
 
   const typeFilteredTransactions = getFilterTransactions(
@@ -52,6 +62,8 @@ export default function TransactionsPage() {
   const dateFilteredTransactions = filterTransactionsByDate(
     searchedTransactions,
     dateFilter,
+    appliedStartDate,
+    appliedEndDate,
   );
 
   return (
@@ -74,6 +86,9 @@ export default function TransactionsPage() {
         <TransactionDateFilter
           dateFilter={dateFilter}
           onFilter={handleFilterTransactionByDate}
+          onApply={handleApplyDateRange}
+          isCustomRangeOpen={isCustomRangeOpen}
+          setIsCustomRangeOpen={setIsCustomRangeOpen}
         />
       </div>
       <div className="mt-4 flex items-center gap-2">
