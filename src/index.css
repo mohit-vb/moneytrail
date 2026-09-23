@@ -16,9 +16,9 @@
   --color-accent: #1f6e5c;
   --color-accent-soft: #e4ede8;
 
-  --color-income: #1f6e5c;
-  --color-expense: #3a392f;
-  --color-transfer: #55606b;
+  --color-income: #23ad8d;
+  --color-expense: #e78870;
+  --color-transfer: #a8c8e7;
 
   --color-warn: #a9782e;
   --color-warn-soft: #f3e9d4;
@@ -168,4 +168,26 @@ button {
 
 .num {
   font-variant-numeric: tabular-nums;
+}
+
+@layer base {
+  table {
+    @apply w-full text-sm text-left rtl:text-right;
+  }
+
+  thead {
+    @apply text-sm bg-[#091a17];
+  }
+
+  th {
+    @apply px-6 py-3 font-medium;
+  }
+
+  tr {
+    @apply px-6 py-4 text-surface/80 font-medium whitespace-nowrap border-b border-b-white/10;
+  }
+
+  td {
+    @apply px-6 py-4;
+  }
 }
