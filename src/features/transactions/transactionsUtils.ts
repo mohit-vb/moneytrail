@@ -78,10 +78,41 @@ const filterTransactionsByDate = function (
   }
 
   if (dateFilter === "custom-range") {
-    console.log(startDate, endDate);
+    return transactions.filter((transaction) => {
+      const transactionDate = new Date(transaction.date);
+      const start = new Date(startDate);
+      const end = new Date(endDate);
+
+      return transactionDate >= start && transactionDate <= end;
+    });
   }
 
   return transactions;
+};
+
+const filterTransactionsByCategory = function (
+  transactions: Transaction[],
+  categoryId: string,
+) {
+  if (categoryId === "Category") return transactions;
+
+  return transactions.filter((transaction) => {
+    if (transaction.type !== "expense" && transaction.type !== "income") {
+      return false;
+    }
+    return transaction.categoryId === categoryId;
+  });
+};
+
+const paginateTransactions = function (
+  transaction: Transaction[],
+  currentPage: number,
+  itemsPerPage: number,
+) {
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+
+  return transaction.slice(startIndex, endIndex);
 };
 
 export {
@@ -91,4 +122,6 @@ export {
   getSearchedTransactions,
   formatCurrency,
   filterTransactionsByDate,
+  filterTransactionsByCategory,
+  paginateTransactions,
 };
