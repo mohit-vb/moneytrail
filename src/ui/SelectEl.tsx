@@ -4,7 +4,7 @@ export default function SelectEl({ children, ...props }: SelectElProps) {
   return (
     <div className="relative inline-block">
       <select
-        className="appearance-none w-max border border-accent/40 py-1 px-4 rounded-full flex items-center gap-2 cursor-pointer bg-ink"
+        className="text-sm appearance-none w-max border border-accent/40 py-1 px-4 rounded-full flex items-center gap-2 cursor-pointer bg-ink"
         {...props}
       >
         {children}
