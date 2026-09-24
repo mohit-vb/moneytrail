@@ -5,6 +5,7 @@ import TransactionDateFilter from "./TransactionDateFilter";
 import ActiveFilterChips from "./ActiveFilterChips";
 import TransactionCategoryFilter from "./TransactionCategoryFilter";
 import TransactionsPagination from "./TransactionsPagination";
+import TransactionsSummary from "./TransactionsSummary";
 
 export {
   TransactionTable,
@@ -14,4 +15,5 @@ export {
   ActiveFilterChips,
   TransactionCategoryFilter,
   TransactionsPagination,
+  TransactionsSummary,
 };

@@ -11,6 +11,7 @@ import {
   TransactionCategoryFilter,
   ActiveFilterChips,
   TransactionsPagination,
+  TransactionsSummary,
 } from "../features/transactions/components";
 
 import {
@@ -19,6 +20,8 @@ import {
   getSearchedTransactions,
   filterTransactionsByCategory,
   paginateTransactions,
+  getTotalIncome,
+  getTotalExpense,
 } from "../features/transactions/transactionsUtils";
 
 export default function TransactionsPage() {
@@ -140,6 +143,10 @@ export default function TransactionsPage() {
     itemsPerPage,
   );
 
+  const totalTransactions = categoryFilteredTransactions.length;
+  const totalIncome = getTotalIncome(categoryFilteredTransactions);
+  const totalExpense = getTotalExpense(categoryFilteredTransactions);
+
   return (
     <div>
       <header className="flex items-center justify-between">
@@ -182,7 +189,13 @@ export default function TransactionsPage() {
         />
       </div>
 
-      <div className="mt-6">
+      <TransactionsSummary
+        totalTransactions={totalTransactions}
+        totalIncome={totalIncome}
+        totalExpense={totalExpense}
+      />
+
+      <div className="mt-2">
         <TransactionTable transactions={paginatedTransactions} />
         {totalPages > 1 && (
           <TransactionsPagination

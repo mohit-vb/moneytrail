@@ -14,6 +14,24 @@ const getCategoryName = function (categoryId: string) {
   return category?.name;
 };
 
+const getTotalIncome = function (transactions: Transaction[]) {
+  return transactions.reduce((acc, transaction) => {
+    if (transaction.type === "income") {
+      return acc + transaction.amountMinor;
+    }
+    return acc;
+  }, 0);
+};
+
+const getTotalExpense = function (transactions: Transaction[]) {
+  return transactions.reduce((acc, transaction) => {
+    if (transaction.type === "expense") {
+      return acc + transaction.amountMinor;
+    }
+    return acc;
+  }, 0);
+};
+
 const getFilterTransactions = function (
   transactions: Transaction[],
   type: Transaction["type"] | "all",
@@ -124,4 +142,6 @@ export {
   filterTransactionsByDate,
   filterTransactionsByCategory,
   paginateTransactions,
+  getTotalIncome,
+  getTotalExpense,
 };
