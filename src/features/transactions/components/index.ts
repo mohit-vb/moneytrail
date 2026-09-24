@@ -3,6 +3,8 @@ import TransactionRow from "./TransactionRow";
 import TransactionTypeFilter from "./TransactionTypeFilter";
 import TransactionDateFilter from "./TransactionDateFilter";
 import ActiveFilterChips from "./ActiveFilterChips";
+import TransactionCategoryFilter from "./TransactionCategoryFilter";
+import TransactionsPagination from "./TransactionsPagination";
 
 export {
   TransactionTable,
@@ -10,4 +12,6 @@ export {
   TransactionTypeFilter,
   TransactionDateFilter,
   ActiveFilterChips,
+  TransactionCategoryFilter,
+  TransactionsPagination,
 };
