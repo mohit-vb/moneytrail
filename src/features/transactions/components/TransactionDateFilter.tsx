@@ -7,19 +7,17 @@ type TransactionDateFilter = {
   dateFilter: TransactionDateFilterValue;
   onFilter: (value: TransactionDateFilterValue) => void;
   onApply: (startDate: string, endDate: string) => void;
-  isCustomRangeOpen: boolean;
-  setIsCustomRangeOpen: (value: boolean) => void;
 };
 
 export default function TransactionDateFilter({
   dateFilter,
   onFilter,
   onApply,
-  isCustomRangeOpen,
-  setIsCustomRangeOpen,
 }: TransactionDateFilter) {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [isCustomRangeOpen, setIsCustomRangeOpen] = useState(false);
+
   return (
     <div className="relative">
       <SelectEl
@@ -80,7 +78,10 @@ export default function TransactionDateFilter({
             <Button
               variant="primary"
               className="w-full"
-              onClick={() => onApply(startDate, endDate)}
+              onClick={() => {
+                onApply(startDate, endDate);
+                setIsCustomRangeOpen(false);
+              }}
             >
               Apply
             </Button>
