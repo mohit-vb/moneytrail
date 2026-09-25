@@ -1,9 +1,9 @@
 import { useState } from "react";
-import type { Transaction } from "../domain/types/transactions";
-import type { TransactionDateFilterValue } from "../domain/types/transactions";
+
 import { goldenFixture } from "../data/seeds";
 import { Plus } from "lucide-react";
 import { Button, InputEl } from "../ui";
+
 import {
   TransactionTable,
   TransactionTypeFilter,
@@ -15,78 +15,43 @@ import {
 } from "../features/transactions/components";
 
 import {
-  filterTransactionsByDate,
-  getFilterTransactions,
-  getSearchedTransactions,
-  filterTransactionsByCategory,
-  paginateTransactions,
   getTotalIncome,
   getTotalExpense,
+  paginateTransactions,
 } from "../features/transactions/transactionsUtils";
 
-export default function TransactionsPage() {
-  const [search, setSearch] = useState("");
-  const [transactionType, setTransactionType] = useState<
-    Transaction["type"] | "all"
-  >("all");
-  const [dateFilter, setDateFilter] =
-    useState<TransactionDateFilterValue>("Date");
+import useTransactionFilter from "../features/transactions/hooks/useTransactionFilter";
+import Modal from "../ui/Modal";
+import AddTransaction from "../features/transactions/components/AddTransaction";
 
-  const [appliedStartDate, setAppliedStartDate] = useState("");
-  const [appliedEndDate, setAppliedEndDate] = useState("");
-  const [isCustomRangeOpen, setIsCustomRangeOpen] = useState(false);
-  const [categoryId, setCategoryId] = useState("Category");
+export default function TransactionsPage() {
   const [currentPage, setCurrentPage] = useState(1);
 
-  const handleFilterTransaction = function (type: Transaction["type"] | "all") {
-    setTransactionType(type);
+  const handleFilterChange = function () {
     setCurrentPage(1);
   };
 
-  const handleRemoveFilterTransaction = function () {
-    setTransactionType("all");
-    setCurrentPage(1);
-  };
-
-  const handleRemoveCategory = function () {
-    setCategoryId("Category");
-    setCurrentPage(1);
-  };
-
-  const handleFilterTransactionByDate = function (
-    value: TransactionDateFilterValue,
-  ) {
-    setDateFilter(value);
-    setCurrentPage(1);
-  };
-
-  const handleApplyDateRange = function (startDate: string, endDate: string) {
-    setAppliedStartDate(startDate);
-    setAppliedEndDate(endDate);
-    setIsCustomRangeOpen(false);
-    setCurrentPage(1);
-  };
-
-  const handleFilterByCategory = function (categoryId: string) {
-    setCategoryId(categoryId);
-    setCurrentPage(1);
-  };
-
-  const handleRemoveDateFilter = function () {
-    setDateFilter("Date");
-    setAppliedStartDate("");
-    setAppliedEndDate("");
-    setCurrentPage(1);
-  };
-
-  const handleClearAllFilters = function () {
-    setTransactionType("all");
-    setDateFilter("Date");
-    setAppliedStartDate("");
-    setAppliedEndDate("");
-    setCategoryId("Category");
-    setCurrentPage(1);
-  };
+  const {
+    search,
+    transactionType,
+    dateFilter,
+    appliedStartDate,
+    appliedEndDate,
+    categoryId,
+    handleSearch,
+    handleFilterTransaction,
+    handleRemoveFilterTransaction,
+    handleRemoveCategory,
+    handleFilterTransactionByDate,
+    handleApplyDateRange,
+    handleFilterByCategory,
+    handleRemoveDateFilter,
+    handleClearAllFilters,
+    categoryFilteredTransactions,
+  } = useTransactionFilter({
+    transactions: goldenFixture,
+    onFilterChange: handleFilterChange,
+  });
 
   const handlePageChange = function (page: number) {
     setCurrentPage(page);
@@ -109,28 +74,6 @@ export default function TransactionsPage() {
       return prev - 1;
     });
   };
-
-  const typeFilteredTransactions = getFilterTransactions(
-    goldenFixture,
-    transactionType,
-  );
-
-  const searchedTransactions = getSearchedTransactions(
-    typeFilteredTransactions,
-    search,
-  );
-
-  const dateFilteredTransactions = filterTransactionsByDate(
-    searchedTransactions,
-    dateFilter,
-    appliedStartDate,
-    appliedEndDate,
-  );
-
-  const categoryFilteredTransactions = filterTransactionsByCategory(
-    dateFilteredTransactions,
-    categoryId,
-  );
 
   const itemsPerPage = 10;
   const totalPages = Math.ceil(
@@ -159,7 +102,7 @@ export default function TransactionsPage() {
       <InputEl
         className="mt-4"
         placeholder="Search by description"
-        onChange={(e) => setSearch(e.target.value)}
+        onChange={(e) => handleSearch(e.target.value)}
         value={search}
       />
       <div className="flex items-center gap-10 mt-4">
@@ -169,8 +112,6 @@ export default function TransactionsPage() {
             dateFilter={dateFilter}
             onFilter={handleFilterTransactionByDate}
             onApply={handleApplyDateRange}
-            isCustomRangeOpen={isCustomRangeOpen}
-            setIsCustomRangeOpen={setIsCustomRangeOpen}
           />
           <TransactionCategoryFilter onFilter={handleFilterByCategory} />
         </div>
@@ -207,6 +148,13 @@ export default function TransactionsPage() {
           />
         )}
       </div>
+      {/* <Modal
+        title="Add Transaction"
+        isOpen={true}
+        onClose={() => console.log("not yet")}
+      >
+        <AddTransaction />
+      </Modal> */}
     </div>
   );
 }
