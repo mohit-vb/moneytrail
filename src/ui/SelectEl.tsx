@@ -6,9 +6,11 @@ export default function SelectEl({
   ...props
 }: SelectElProps) {
   return (
-    <div className="relative inline-block">
+    <div
+      className={`relative inline-flex items-center bg-ink border border-ink-soft select-wrapper overflow-hidden ${className}`}
+    >
       <select
-        className={`text-sm appearance-none w-max  py-1 px-4  flex items-center gap-2 cursor-pointer bg-ink border border-ink-soft focus:ring-accent focus:border-accent ${className}`}
+        className={`w-full text-sm appearance-none py-2 px-4 cursor-pointer bg-ink rounded-inherit focus:ring-accent focus:border-accent`}
         {...props}
       >
         {children}
