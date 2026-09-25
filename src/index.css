@@ -191,6 +191,6 @@ button {
   }
 
   label {
-    @apply block text-sm text-surface/70;
+    @apply block text-xs text-surface/50;
   }
 }
