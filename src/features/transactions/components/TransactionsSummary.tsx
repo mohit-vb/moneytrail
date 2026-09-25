@@ -12,7 +12,7 @@ export default function TransactionsSummary({
   totalExpense,
 }: TransactionsSummaryProps) {
   return (
-    <div className="flex items-center gap-4 py-2 mt-4 border-b border-b-gray-900">
+    <div className="flex items-center gap-4 py-2 mt-4 border-b border-b-white/20">
       <SummarySegament name="Transactions" value={totalTransactions} />
       <span className="`w-1 h-1 rounded-full bg-surface/50">&nbsp;</span>
       <SummarySegament name="Income" value={formatCurrency(totalIncome)} />

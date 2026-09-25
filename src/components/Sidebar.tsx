@@ -3,7 +3,7 @@ import { sidebarMenu } from "../constants";
 
 export default function Sidebar() {
   return (
-    <aside className="w-60 h-full flex flex-col gap-8 px-4 py-6 border-r border-r-gray-900  ">
+    <aside className="w-60 h-full flex flex-col gap-8 px-4 py-6 border-r border-r-white/10  ">
       <h1>
         Money<span className="text-accent font-semibold">Trail</span>
       </h1>
