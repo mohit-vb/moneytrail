@@ -26,6 +26,15 @@ import AddTransaction from "../features/transactions/components/AddTransaction";
 
 export default function TransactionsPage() {
   const [currentPage, setCurrentPage] = useState(1);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleOpenModal = function () {
+    setIsOpen(true);
+  };
+
+  const handleCloseModal = function () {
+    setIsOpen(false);
+  };
 
   const handleFilterChange = function () {
     setCurrentPage(1);
@@ -94,7 +103,7 @@ export default function TransactionsPage() {
     <div>
       <header className="flex items-center justify-between">
         <h1>Transactions</h1>
-        <Button>
+        <Button onClick={handleOpenModal}>
           <Plus className="size-4" />
           <span>Add</span>
         </Button>
@@ -148,13 +157,10 @@ export default function TransactionsPage() {
           />
         )}
       </div>
-      {/* <Modal
-        title="Add Transaction"
-        isOpen={true}
-        onClose={() => console.log("not yet")}
-      >
-        <AddTransaction />
-      </Modal> */}
+
+      <Modal title="Add Transaction" isOpen={isOpen} onClose={handleCloseModal}>
+        <AddTransaction onClose={handleCloseModal} />
+      </Modal>
     </div>
   );
 }
