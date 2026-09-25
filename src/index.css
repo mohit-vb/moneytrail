@@ -189,4 +189,8 @@ button {
   td {
     @apply px-6 py-4;
   }
+
+  label {
+    @apply block text-sm text-surface/70;
+  }
 }

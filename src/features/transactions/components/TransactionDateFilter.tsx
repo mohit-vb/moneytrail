@@ -21,6 +21,7 @@ export default function TransactionDateFilter({
   return (
     <div className="relative">
       <SelectEl
+        className="rounded-full"
         value={dateFilter}
         onChange={(e) => {
           const value = e.target.value as TransactionDateFilterValue;

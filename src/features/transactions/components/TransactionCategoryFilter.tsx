@@ -10,7 +10,10 @@ export default function TransactionCategoryFilter({
 }: TransactionCategoryFilterProps) {
   return (
     <div className="relative">
-      <SelectEl onChange={(e) => onFilter(e.target.value)}>
+      <SelectEl
+        className="rounded-full"
+        onChange={(e) => onFilter(e.target.value)}
+      >
         <option value="Category">Category</option>
         {seedCategories.map((category) => (
           <option key={category.id} value={category.id}>

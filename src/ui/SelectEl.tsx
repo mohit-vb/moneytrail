@@ -1,10 +1,14 @@
 type SelectElProps = React.ComponentProps<"select">;
 
-export default function SelectEl({ children, ...props }: SelectElProps) {
+export default function SelectEl({
+  children,
+  className,
+  ...props
+}: SelectElProps) {
   return (
     <div className="relative inline-block">
       <select
-        className="text-sm appearance-none w-max border border-accent/40 py-1 px-4 rounded-full flex items-center gap-2 cursor-pointer bg-ink"
+        className={`text-sm appearance-none w-max  py-1 px-4  flex items-center gap-2 cursor-pointer bg-ink border border-ink-soft focus:ring-accent focus:border-accent ${className}`}
         {...props}
       >
         {children}
