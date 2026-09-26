@@ -10,11 +10,19 @@ import {
   filterTransactionsByDate,
   getFilterTransactions,
   getSearchedTransactions,
+  sortTransactions,
 } from "../transactionsUtils";
 
 type TransactionFilter = {
   transactions: Transaction[];
   onFilterChange: () => void;
+};
+
+type TransactionSortType = "newest" | "oldest" | "amount-high" | "amount-low";
+
+type TransactionSortOption = {
+  value: TransactionSortType;
+  label: string;
 };
 
 export default function useTransactionFilter({
@@ -31,28 +39,25 @@ export default function useTransactionFilter({
   const [appliedStartDate, setAppliedStartDate] = useState("");
   const [appliedEndDate, setAppliedEndDate] = useState("");
   const [categoryId, setCategoryId] = useState("Category");
+  const [sortBy, setSortBy] = useState<TransactionSortType>("newest");
 
   const handleSearch = function (value: string) {
     setSearch(value);
-
     onFilterChange();
   };
 
   const handleFilterTransaction = function (type: Transaction["type"] | "all") {
     setTransactionType(type);
-
     onFilterChange();
   };
 
   const handleRemoveFilterTransaction = function () {
     setTransactionType("all");
-
     onFilterChange();
   };
 
   const handleRemoveCategory = function () {
     setCategoryId("Category");
-
     onFilterChange();
   };
 
@@ -60,20 +65,27 @@ export default function useTransactionFilter({
     value: TransactionDateFilterValue,
   ) {
     setDateFilter(value);
-
     onFilterChange();
   };
 
   const handleApplyDateRange = function (startDate: string, endDate: string) {
     setAppliedStartDate(startDate);
     setAppliedEndDate(endDate);
-
     onFilterChange();
   };
 
   const handleFilterByCategory = function (categoryId: string) {
     setCategoryId(categoryId);
+    onFilterChange();
+  };
 
+  const handleSortBy = function (sortBy: TransactionSortType) {
+    setSortBy(sortBy);
+    onFilterChange();
+  };
+
+  const handleRemoveSort = function () {
+    setSortBy("newest");
     onFilterChange();
   };
 
@@ -81,7 +93,6 @@ export default function useTransactionFilter({
     setDateFilter("Date");
     setAppliedStartDate("");
     setAppliedEndDate("");
-
     onFilterChange();
   };
 
@@ -91,7 +102,7 @@ export default function useTransactionFilter({
     setAppliedStartDate("");
     setAppliedEndDate("");
     setCategoryId("Category");
-
+    setSortBy("newest");
     onFilterChange();
   };
 
@@ -118,6 +129,11 @@ export default function useTransactionFilter({
     categoryId,
   );
 
+  const sortedTransactions = sortTransactions(
+    categoryFilteredTransactions,
+    sortBy,
+  );
+
   return {
     search,
     transactionType,
@@ -125,6 +141,7 @@ export default function useTransactionFilter({
     appliedStartDate,
     appliedEndDate,
     categoryId,
+    sortBy,
     handleSearch,
     handleFilterTransaction,
     handleRemoveFilterTransaction,
@@ -132,8 +149,10 @@ export default function useTransactionFilter({
     handleFilterTransactionByDate,
     handleApplyDateRange,
     handleFilterByCategory,
+    handleSortBy,
+    handleRemoveSort,
     handleRemoveDateFilter,
     handleClearAllFilters,
-    categoryFilteredTransactions,
+    sortedTransactions,
   };
 }

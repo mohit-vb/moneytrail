@@ -6,6 +6,8 @@ import ActiveFilterChips from "./ActiveFilterChips";
 import TransactionCategoryFilter from "./TransactionCategoryFilter";
 import TransactionsPagination from "./TransactionsPagination";
 import TransactionsSummary from "./TransactionsSummary";
+import TransactionSortFilter from "./TransactionSortFilter";
+import AddTransaction from "./AddTransaction";
 
 export {
   TransactionTable,
@@ -16,4 +18,6 @@ export {
   TransactionCategoryFilter,
   TransactionsPagination,
   TransactionsSummary,
+  TransactionSortFilter,
+  AddTransaction,
 };

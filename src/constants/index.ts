@@ -56,12 +56,11 @@ export const categoriesOptions = [
 ];
 
 export const paymentOptions = [
-  "Cash",
-  "Bank",
-  "Card",
-  "Investment",
-  "Loan",
-  "Other",
+  "upi",
+  "card",
+  "cash",
+  "netbanking",
+  "bank_transfer",
 ];
 
 export const accountOptions = [

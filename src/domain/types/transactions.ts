@@ -5,6 +5,12 @@ export type PaymentMethod =
   | "netbanking"
   | "bank_transfer";
 
+export type TransactionSortOption =
+  | "newest"
+  | "oldest"
+  | "amount-high"
+  | "amount-low";
+
 export interface BaseTransaction {
   id: string;
   amountMinor: number;

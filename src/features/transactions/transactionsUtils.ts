@@ -2,6 +2,7 @@ import { seedAccounts, seedCategories } from "../../data/seeds";
 import type {
   Transaction,
   TransactionDateFilterValue,
+  TransactionSortOption,
 } from "../../domain/types/transactions";
 
 const getAccountName = function (accountId: string) {
@@ -133,6 +134,27 @@ const paginateTransactions = function (
   return transaction.slice(startIndex, endIndex);
 };
 
+const sortTransactions = function (
+  transactions: Transaction[],
+  sortBy: TransactionSortOption,
+): Transaction[] {
+  const sorted = [...transactions];
+
+  switch (sortBy) {
+    case "newest":
+      return sorted.sort((a, b) => b.date.localeCompare(a.date));
+
+    case "oldest":
+      return sorted.sort((a, b) => a.date.localeCompare(b.date));
+
+    case "amount-high":
+      return sorted.sort((a, b) => b.amountMinor - a.amountMinor);
+
+    case "amount-low":
+      return sorted.sort((a, b) => a.amountMinor - b.amountMinor);
+  }
+};
+
 export {
   getAccountName,
   getCategoryName,
@@ -144,4 +166,5 @@ export {
   paginateTransactions,
   getTotalIncome,
   getTotalExpense,
+  sortTransactions,
 };

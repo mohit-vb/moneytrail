@@ -1,7 +1,6 @@
 import { useState } from "react";
-
-import { goldenFixture } from "../data/seeds";
 import { Plus } from "lucide-react";
+import { useTransactions } from "../features/transactions/hooks/useTransactions";
 import { Button, InputEl } from "../ui";
 
 import {
@@ -12,6 +11,8 @@ import {
   ActiveFilterChips,
   TransactionsPagination,
   TransactionsSummary,
+  TransactionSortFilter,
+  AddTransaction,
 } from "../features/transactions/components";
 
 import {
@@ -22,11 +23,11 @@ import {
 
 import useTransactionFilter from "../features/transactions/hooks/useTransactionFilter";
 import Modal from "../ui/Modal";
-import AddTransaction from "../features/transactions/components/AddTransaction";
 
 export default function TransactionsPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [isOpen, setIsOpen] = useState(false);
+  const { transactions } = useTransactions();
 
   const handleOpenModal = function () {
     setIsOpen(true);
@@ -47,18 +48,21 @@ export default function TransactionsPage() {
     appliedStartDate,
     appliedEndDate,
     categoryId,
+    sortBy,
     handleSearch,
     handleFilterTransaction,
     handleRemoveFilterTransaction,
     handleRemoveCategory,
+    handleSortBy,
+    handleRemoveSort,
     handleFilterTransactionByDate,
     handleApplyDateRange,
     handleFilterByCategory,
     handleRemoveDateFilter,
     handleClearAllFilters,
-    categoryFilteredTransactions,
+    sortedTransactions,
   } = useTransactionFilter({
-    transactions: goldenFixture,
+    transactions: transactions,
     onFilterChange: handleFilterChange,
   });
 
@@ -85,19 +89,17 @@ export default function TransactionsPage() {
   };
 
   const itemsPerPage = 10;
-  const totalPages = Math.ceil(
-    categoryFilteredTransactions.length / itemsPerPage,
-  );
+  const totalPages = Math.ceil(sortedTransactions.length / itemsPerPage);
 
   const paginatedTransactions = paginateTransactions(
-    categoryFilteredTransactions,
+    sortedTransactions,
     currentPage,
     itemsPerPage,
   );
 
-  const totalTransactions = categoryFilteredTransactions.length;
-  const totalIncome = getTotalIncome(categoryFilteredTransactions);
-  const totalExpense = getTotalExpense(categoryFilteredTransactions);
+  const totalTransactions = sortedTransactions.length;
+  const totalIncome = getTotalIncome(sortedTransactions);
+  const totalExpense = getTotalExpense(sortedTransactions);
 
   return (
     <div>
@@ -122,7 +124,11 @@ export default function TransactionsPage() {
             onFilter={handleFilterTransactionByDate}
             onApply={handleApplyDateRange}
           />
-          <TransactionCategoryFilter onFilter={handleFilterByCategory} />
+          <TransactionCategoryFilter
+            categoryId={categoryId}
+            onFilter={handleFilterByCategory}
+          />
+          <TransactionSortFilter sortBy={sortBy} onSort={handleSortBy} />
         </div>
       </div>
       <div className="mt-4 flex items-center gap-2">
@@ -130,7 +136,9 @@ export default function TransactionsPage() {
           transactionType={transactionType}
           onRemoveTransactionType={handleRemoveFilterTransaction}
           categoryId={categoryId}
+          sortBy={sortBy}
           onRemoveCategory={handleRemoveCategory}
+          onRemoveSort={handleRemoveSort}
           dateFilter={dateFilter}
           onRemoveDateFilter={handleRemoveDateFilter}
           onClearAllFilters={handleClearAllFilters}

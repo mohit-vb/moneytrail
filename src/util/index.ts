@@ -6,6 +6,16 @@ function minorToRupees(minor: number): number {
   return minor / 100;
 }
 
+export const rupeesToPaise = (amount: string): number => {
+  const value = Number(amount);
+
+  if (!Number.isFinite(value) || value <= 0) {
+    throw new Error("Invalid transaction amount");
+  }
+
+  return Math.round(value * 100);
+};
+
 const iso = (date: string, time = "T09:00:00.000Z") => `${date}${time}`;
 
 const getTodayDate = () => {

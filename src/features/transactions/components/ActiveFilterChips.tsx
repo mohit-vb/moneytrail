@@ -6,14 +6,25 @@ import type {
 import { seedCategories } from "../../../data/seeds";
 import { Button } from "../../../ui";
 
+const sortLabelMap: Record<TransactionSortType, string> = {
+  newest: "Newest",
+  oldest: "Oldest",
+  "amount-high": "Amount: High → Low",
+  "amount-low": "Amount: Low → High",
+};
+
+type TransactionSortType = "newest" | "oldest" | "amount-high" | "amount-low";
+
 type ActiveFilterChipsProps = {
   transactionType: Transaction["type"] | "all";
   categoryId: string | null;
   dateFilter: TransactionDateFilterValue;
+  sortBy: TransactionSortType;
   onRemoveTransactionType: () => void;
   onRemoveCategory: () => void;
   onRemoveDateFilter: () => void;
   onClearAllFilters: () => void;
+  onRemoveSort: () => void;
   appliedStartDate: string;
   appliedEndDate: string;
 };
@@ -22,10 +33,12 @@ export default function ActiveFilterChips({
   transactionType,
   categoryId,
   dateFilter,
+  sortBy,
   onRemoveTransactionType,
   onRemoveCategory,
   onRemoveDateFilter,
   onClearAllFilters,
+  onRemoveSort,
   appliedStartDate,
   appliedEndDate,
 }: ActiveFilterChipsProps) {
@@ -54,7 +67,12 @@ export default function ActiveFilterChips({
     dateFilterLabel = `${appliedStartDate} - ${appliedEndDate}`;
   }
 
-  if (transactionType === "all" && !category && dateFilter === "Date")
+  if (
+    transactionType === "all" &&
+    !category &&
+    dateFilter === "Date" &&
+    sortBy === "newest"
+  )
     return null;
 
   return (
@@ -83,7 +101,17 @@ export default function ActiveFilterChips({
         </div>
       )}
 
-      {(transactionType !== "all" || category || hasActiveDateFilter) && (
+      {sortBy !== "newest" && (
+        <div className="bg-accent rounded-full inline-flex items-center gap-1 px-2 py-1 text-xs ">
+          <span>{sortLabelMap[sortBy]}</span>
+          <X className="size-3 cursor-pointer" onClick={onRemoveSort} />
+        </div>
+      )}
+
+      {(transactionType !== "all" ||
+        category ||
+        hasActiveDateFilter ||
+        sortBy !== "newest") && (
         <Button variant="ghost" onClick={onClearAllFilters}>
           Clear Filters
         </Button>

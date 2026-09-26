@@ -8,6 +8,7 @@ import {
 } from "../../../constants";
 import { getTodayDate } from "../../../util";
 import { useTransactions } from "../hooks/useTransactions";
+import { createTransaction } from "../../../domain/transactions/createTranasction";
 
 const transactionModes = [
   {
@@ -45,6 +46,7 @@ type TransactionFormState = {
 
 export default function AddTransaction({ onClose }: AddTransactionProps) {
   const { addTransaction } = useTransactions();
+
   const [form, setForm] = useState<TransactionFormState>({
     type: "expense",
     amount: "",
@@ -66,8 +68,10 @@ export default function AddTransaction({ onClose }: AddTransactionProps) {
 
   const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const newTransaction = createTransaction(form);
+    addTransaction(newTransaction);
 
-    console.log(form);
+    onClose();
   };
 
   const isTransfer = form.type === "transfer";
