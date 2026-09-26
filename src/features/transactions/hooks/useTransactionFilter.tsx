@@ -20,11 +20,6 @@ type TransactionFilter = {
 
 type TransactionSortType = "newest" | "oldest" | "amount-high" | "amount-low";
 
-type TransactionSortOption = {
-  value: TransactionSortType;
-  label: string;
-};
-
 export default function useTransactionFilter({
   transactions,
   onFilterChange,
