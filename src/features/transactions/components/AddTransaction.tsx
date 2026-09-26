@@ -7,6 +7,7 @@ import {
   accountOptions,
 } from "../../../constants";
 import { getTodayDate } from "../../../util";
+import { useTransactions } from "../hooks/useTransactions";
 
 const transactionModes = [
   {
@@ -43,6 +44,7 @@ type TransactionFormState = {
 };
 
 export default function AddTransaction({ onClose }: AddTransactionProps) {
+  const { addTransaction } = useTransactions();
   const [form, setForm] = useState<TransactionFormState>({
     type: "expense",
     amount: "",
