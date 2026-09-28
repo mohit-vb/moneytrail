@@ -4,6 +4,7 @@ import type { Transaction } from "../../../domain/types/transactions";
 type TransactionContextValue = {
   transactions: Transaction[];
   addTransaction: (transaction: Transaction) => void;
+  deleteTransaction: (id: string) => void;
 };
 
 export const TransactionContext = createContext<

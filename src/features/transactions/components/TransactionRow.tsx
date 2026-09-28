@@ -1,9 +1,11 @@
+import { SquarePen, Trash } from "lucide-react";
 import type { Transaction } from "../../../domain/types/transactions";
 import {
   getAccountName,
   getCategoryName,
   formatCurrency,
 } from "../transactionsUtils";
+import { useTransactions } from "../hooks/useTransactions";
 
 const typeColorMap: Partial<Record<Transaction["type"], string>> = {
   income: "text-income font-semibold",
@@ -15,6 +17,7 @@ type TransactionRowProps = {
 };
 
 export default function TransactionRow({ transaction }: TransactionRowProps) {
+  const { deleteTransaction } = useTransactions();
   return (
     <tr>
       <td>{transaction.date}</td>
@@ -43,6 +46,14 @@ export default function TransactionRow({ transaction }: TransactionRowProps) {
             ? "-"
             : ""}{" "}
         {formatCurrency(transaction.amountMinor)}
+      </td>
+      <td className="flex gap-2">
+        <button>
+          <SquarePen className="size-4 cursor-pointer text-gray-300 hover:text-gray-50" />
+        </button>
+        <button onClick={() => deleteTransaction(transaction.id)}>
+          <Trash className="size-4 cursor-pointer text-danger hover:text-red-300" />
+        </button>
       </td>
     </tr>
   );

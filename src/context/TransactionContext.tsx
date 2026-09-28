@@ -1,7 +1,11 @@
-import { useReducer } from "react";
+import { useEffect, useReducer } from "react";
 import { goldenFixture } from "../data/seeds";
 import { TransactionContext } from "../features/transactions/hooks/useTransactions";
 import type { Transaction } from "../domain/types/transactions";
+import {
+  saveTransactions,
+  loadTransactions,
+} from "../persistance/transactionStorage";
 
 type TransactionState = {
   transactions: Transaction[];
@@ -21,19 +25,30 @@ type TransactionAction =
       payload: string;
     };
 
-const initialState: TransactionState = {
-  transactions: goldenFixture,
+const createInitialState = (): TransactionState => {
+  const savedTransactions = loadTransactions();
+
+  return {
+    transactions:
+      savedTransactions.length > 0 ? savedTransactions : goldenFixture,
+  };
 };
 
 const transactionReducer = (
   state: TransactionState,
   action: TransactionAction,
-) => {
+): TransactionState => {
   switch (action.type) {
     case "ADD_TRANSACTION":
       return {
         ...state,
         transactions: [...state.transactions, action.payload],
+      };
+    case "DELETE_TRANSACTION":
+      return {
+        transactions: state.transactions.filter(
+          (transaction) => transaction.id !== action.payload,
+        ),
       };
     default:
       throw new Error("Unknown action type");
@@ -45,15 +60,29 @@ export default function TransactionProvider({
 }: React.PropsWithChildren) {
   const [{ transactions }, dispatch] = useReducer(
     transactionReducer,
-    initialState,
+    undefined,
+    createInitialState,
   );
 
   const addTransaction = (transaction: Transaction) => {
     dispatch({ type: "ADD_TRANSACTION", payload: transaction });
   };
 
+  const deleteTransaction = (id: string) => {
+    dispatch({ type: "DELETE_TRANSACTION", payload: id });
+  };
+
+  useEffect(
+    function () {
+      saveTransactions(transactions);
+    },
+    [transactions],
+  );
+
   return (
-    <TransactionContext value={{ transactions, addTransaction }}>
+    <TransactionContext
+      value={{ transactions, addTransaction, deleteTransaction }}
+    >
       {children}
     </TransactionContext>
   );

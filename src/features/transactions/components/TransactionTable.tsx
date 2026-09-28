@@ -19,6 +19,7 @@ export default function TransactionTable({
             <th scope="col">Account</th>
             <th scope="col">Payment method</th>
             <th scope="col">Amount</th>
+            <th scope="col">&nbsp;</th>
           </tr>
         </thead>
         <tbody>
