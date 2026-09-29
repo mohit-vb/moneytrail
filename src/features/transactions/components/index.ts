@@ -8,6 +8,7 @@ import TransactionsPagination from "./TransactionsPagination";
 import TransactionsSummary from "./TransactionsSummary";
 import TransactionSortFilter from "./TransactionSortFilter";
 import AddTransaction from "./AddTransaction";
+import EditTransaction from "./EditTransaction";
 
 export {
   TransactionTable,
@@ -20,4 +21,5 @@ export {
   TransactionsSummary,
   TransactionSortFilter,
   AddTransaction,
+  EditTransaction,
 };

@@ -50,6 +50,12 @@ const transactionReducer = (
           (transaction) => transaction.id !== action.payload,
         ),
       };
+    case "UPDATE_TRANSACTION":
+      return {
+        transactions: state.transactions.map((transaction) =>
+          transaction.id === action.payload.id ? action.payload : transaction,
+        ),
+      };
     default:
       throw new Error("Unknown action type");
   }
@@ -72,6 +78,10 @@ export default function TransactionProvider({
     dispatch({ type: "DELETE_TRANSACTION", payload: id });
   };
 
+  const updateTransaction = (transaction: Transaction) => {
+    dispatch({ type: "UPDATE_TRANSACTION", payload: transaction });
+  };
+
   useEffect(
     function () {
       saveTransactions(transactions);
@@ -81,7 +91,12 @@ export default function TransactionProvider({
 
   return (
     <TransactionContext
-      value={{ transactions, addTransaction, deleteTransaction }}
+      value={{
+        transactions,
+        addTransaction,
+        deleteTransaction,
+        updateTransaction,
+      }}
     >
       {children}
     </TransactionContext>

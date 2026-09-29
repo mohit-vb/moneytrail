@@ -3,10 +3,12 @@ import TransactionRow from "./TransactionRow";
 
 type TransactionTableProps = {
   transactions: Transaction[];
+  onEdit: (transaction: Transaction) => void;
 };
 
 export default function TransactionTable({
   transactions,
+  onEdit,
 }: TransactionTableProps) {
   return (
     <div className="rounded-md overflow-x-auto border border-white/10">
@@ -24,7 +26,11 @@ export default function TransactionTable({
         </thead>
         <tbody>
           {transactions.map((transaction) => (
-            <TransactionRow key={transaction.id} transaction={transaction} />
+            <TransactionRow
+              key={transaction.id}
+              transaction={transaction}
+              onEdit={onEdit}
+            />
           ))}
         </tbody>
       </table>

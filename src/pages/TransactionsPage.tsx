@@ -13,6 +13,7 @@ import {
   TransactionsSummary,
   TransactionSortFilter,
   AddTransaction,
+  EditTransaction,
 } from "../features/transactions/components";
 
 import {
@@ -23,18 +24,32 @@ import {
 
 import useTransactionFilter from "../features/transactions/hooks/useTransactionFilter";
 import Modal from "../ui/Modal";
+import type { Transaction } from "../domain/types/transactions";
 
 export default function TransactionsPage() {
   const [currentPage, setCurrentPage] = useState(1);
-  const [isOpen, setIsOpen] = useState(false);
+  const [isAddOpen, setIsAddOpen] = useState(false);
+  const [isEditOpen, setIsEditOpen] = useState(false);
+  const [selectedTransaction, setSelectedTransaction] =
+    useState<Transaction | null>(null);
   const { transactions } = useTransactions();
 
-  const handleOpenModal = function () {
-    setIsOpen(true);
+  const handleAddTransaction = function () {
+    setIsAddOpen(true);
   };
 
-  const handleCloseModal = function () {
-    setIsOpen(false);
+  const handleCloseAdd = function () {
+    setIsAddOpen(false);
+  };
+
+  const handleEditTransaction = function (transaction: Transaction) {
+    setSelectedTransaction(transaction);
+    setIsEditOpen(true);
+  };
+
+  const handleCloseEdit = function () {
+    setSelectedTransaction(null);
+    setIsEditOpen(false);
   };
 
   const handleFilterChange = function () {
@@ -105,7 +120,7 @@ export default function TransactionsPage() {
     <div>
       <header className="flex items-center justify-between">
         <h1>Transactions</h1>
-        <Button onClick={handleOpenModal}>
+        <Button onClick={handleAddTransaction}>
           <Plus className="size-4" />
           <span>Add</span>
         </Button>
@@ -154,7 +169,10 @@ export default function TransactionsPage() {
       />
 
       <div className="mt-2">
-        <TransactionTable transactions={paginatedTransactions} />
+        <TransactionTable
+          transactions={paginatedTransactions}
+          onEdit={handleEditTransaction}
+        />
         {totalPages > 1 && (
           <TransactionsPagination
             currentPage={currentPage}
@@ -166,8 +184,24 @@ export default function TransactionsPage() {
         )}
       </div>
 
-      <Modal title="Add Transaction" isOpen={isOpen} onClose={handleCloseModal}>
-        <AddTransaction onClose={handleCloseModal} />
+      <Modal
+        title="Add Transaction"
+        isOpen={isAddOpen}
+        onClose={handleCloseAdd}
+      >
+        <AddTransaction onClose={handleCloseAdd} />
+      </Modal>
+      <Modal
+        title="Edit Transaction"
+        isOpen={isEditOpen}
+        onClose={handleCloseEdit}
+      >
+        {selectedTransaction && (
+          <EditTransaction
+            transaction={selectedTransaction}
+            onClose={handleCloseEdit}
+          />
+        )}
       </Modal>
     </div>
   );

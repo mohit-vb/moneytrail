@@ -14,9 +14,13 @@ const typeColorMap: Partial<Record<Transaction["type"], string>> = {
 
 type TransactionRowProps = {
   transaction: Transaction;
+  onEdit: (transaction: Transaction) => void;
 };
 
-export default function TransactionRow({ transaction }: TransactionRowProps) {
+export default function TransactionRow({
+  transaction,
+  onEdit,
+}: TransactionRowProps) {
   const { deleteTransaction } = useTransactions();
   return (
     <tr>
@@ -48,7 +52,7 @@ export default function TransactionRow({ transaction }: TransactionRowProps) {
         {formatCurrency(transaction.amountMinor)}
       </td>
       <td className="flex gap-2">
-        <button>
+        <button onClick={() => onEdit(transaction)}>
           <SquarePen className="size-4 cursor-pointer text-gray-300 hover:text-gray-50" />
         </button>
         <button onClick={() => deleteTransaction(transaction.id)}>
